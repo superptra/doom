@@ -84,9 +84,17 @@
    (python . t)
    (jupyter . t)))
 
-(setq org-babel-default-header-args:jupyter-python '((:async . "no")
+(setq org-babel-default-header-args:jupyter-python '((:async . "yes")
                                                      (:session . "py")))
 
+(use-package! org
+  :init
+  (defun display-ansi-colors ()
+    "Fixes kernel output in emacs-jupyter"
+    (ansi-color-apply-on-region (point-min) (point-max))
+    (setq org-image-actual-width 600))
+  :hook
+  (org-mode . (lambda () (add-hook! 'org-babel-after-execute-hook #'(lambda () (run-with-timer 0.2 nil #'display-ansi-colors))))))
 
 ;; IPython repl
 (setq python-shell-interpreter "ipython"
@@ -120,3 +128,18 @@
 
 ;;start full-screened
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
+
+
+;; get org to shut up
+(after! org
+  (defun +org-src--drop-org-capf ()
+    (setq-local completion-at-point-functions
+                (remq #'org-completion-at-point
+                      completion-at-point-functions)))
+  (add-hook 'org-src-mode-hook #'+org-src--drop-org-capf))
+
+(after! org
+  (advice-add 'org-element-at-point :around
+              (lambda (orig &rest args)
+                (when (derived-mode-p 'org-mode)
+                  (apply orig args)))))
