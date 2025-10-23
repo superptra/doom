@@ -77,13 +77,31 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                        ;                Corfu                ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+(after! corfu
+  (setq corfu-auto nil
+        +corfu-want-tab-prefer-expand-snippets t
+        +corfu-want-tab-prefer-navigating-snippets t
+        +corfu-want-tab-prefer-navigating-org-tables t))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                        ;               Jupyter               ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;; Jupyter
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((emacs-lisp . t)
-   (julia . t)
-   (python . t)
-   (jupyter . t)))
+(after! org
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((emacs-lisp . t)
+     (julia . t)
+     (python . t)
+     (jupyter . t))))
 
 (setq org-babel-default-header-args:jupyter-python '((:async . "yes")
                                                      (:session . "py")))
@@ -96,40 +114,6 @@
     (setq org-image-actual-width 600))
   :hook
   (org-mode . (lambda () (add-hook! 'org-babel-after-execute-hook #'(lambda () (run-with-timer 0.2 nil #'display-ansi-colors))))))
-
-;; IPython repl
-(setq python-shell-interpreter "ipython"
-      python-shell-interpreter-args "-i --simple-prompt --InteractiveShell.display_page=True")
-
-;; hack for which-key
-(use-package! which-key :ensure t :config (setq which-key-use-C-h-commands t) )
-
-;; Word wrap
-;; (setq +word-wrap-fill-style 'auto)
-;; (setq fill-column 200)
-
-
-;; LaTeX stuff
-(map! :map cdlatex-mode-map :i "TAB" #'cdlatex-tab)
-(setq TeX-master nil)
-
-;; citar
-(after! citar
-  (setq! citar-bibliography '("~/bib/references.bib"))
-  (setq! citar-library-paths '("~/bib/library/files"))
-  (setq! citar-notes-paths '("~/bib/notes")))
-
-(setq reftex-default-bibliography "~/bib/references.bib")
-
-;;biblio
-(setq biblio-download-directory "~/bib/library/files")
-
-;;performance hacks
-(setq max-lisp-eval-depth 13000)
-
-;;start full-screened
-(add-to-list 'initial-frame-alist '(fullscreen . maximized))
-
 
 ;; get org to shut up
 (after! org
@@ -144,3 +128,57 @@
               (lambda (orig &rest args)
                 (when (derived-mode-p 'org-mode)
                   (apply orig args)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                        ;                 Org                  ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+org-agenda-files
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                        ;                Python               ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; IPython repl
+(after! python
+  (setq python-shell-interpreter "ipython"
+        python-shell-interpreter-args "-i --simple-prompt --InteractiveShell.display_page=True"))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                        ;                LaTeX                ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;; LaTeX stuff
+(map! :map cdlatex-mode-map :i "TAB" #'cdlatex-tab)
+(after! tex
+  (setq-default TeX-master nil))
+
+;; citar
+(after! citar
+  (setq citar-bibliography "~/bib/references.bib"
+        citar-library-paths "~/bib/library/files"
+        citar-notes-paths "~/bib/notes"))
+
+(after! reftex
+  (setq reftex-default-bibliography "~/bib/references.bib"))
+
+;;biblio
+(use-package! biblio
+  :custom
+  (biblio-download-directory "~/bib/library/files"))
+
+;; hack for which-key
+(after! which-key :ensure t :config (setq which-key-use-C-h-commands t) )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                        ;                 Misc                ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;performance hacks
+(setq max-lisp-eval-depth 13000)
+
+;;start full-screened
+(add-to-list 'initial-frame-alist '(fullscreen . maximized))
+
+
