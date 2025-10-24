@@ -143,3 +143,11 @@
               (lambda (orig &rest args)
                 (when (derived-mode-p 'org-mode)
                   (apply orig args)))))
+
+;; godot
+(setq treesit-extra-load-path '("~/repos/tree-sitter-gdscript/src/"))
+(setq gdscript-godot-executable "/home/pixie/.bin/Godot_v4.5-stable_mono_linux_x86_64/Godot_v4.5-stable_mono_linux.x86_64")
+
+(with-eval-after-load 'eglot
+  (add-to-list 'eglot-server-programs
+               '((gdscript-mode gdscript-ts-mode) . ("localhost" 6008))))
