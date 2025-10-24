@@ -32,12 +32,12 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-solarized-light)
+(setq doom-theme 'doom-dracula)
 (setq doom-font "Hack-18")
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
-(setq display-line-numbers-type t)
+(setq display-line-numbers-type 'relative)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -76,13 +76,32 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                        ;                Corfu                ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+(after! corfu
+  (setq corfu-auto nil
+        +corfu-want-tab-prefer-expand-snippets t
+        +corfu-want-tab-prefer-navigating-snippets t
+        +corfu-want-tab-prefer-navigating-org-tables t))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                        ;               Jupyter               ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;; Jupyter
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((emacs-lisp . t)
-   (julia . t)
-   (python . t)
-   (jupyter . t)))
+(after! org
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((emacs-lisp . t)
+     (julia . t)
+     (latex . t)
+     (python . t)
+     (jupyter . t))))
 
 (setq org-babel-default-header-args:jupyter-python '((:async . "yes")
                                                      (:session . "py")))
@@ -95,40 +114,6 @@
     (setq org-image-actual-width 600))
   :hook
   (org-mode . (lambda () (add-hook! 'org-babel-after-execute-hook #'(lambda () (run-with-timer 0.2 nil #'display-ansi-colors))))))
-
-;; IPython repl
-(setq python-shell-interpreter "ipython"
-      python-shell-interpreter-args "-i --simple-prompt --InteractiveShell.display_page=True")
-
-;; hack for which-key
-(use-package! which-key :ensure t :config (setq which-key-use-C-h-commands t) )
-
-;; Word wrap
-;; (setq +word-wrap-fill-style 'auto)
-;; (setq fill-column 200)
-
-
-;; LaTeX stuff
-(map! :map cdlatex-mode-map :i "TAB" #'cdlatex-tab)
-(setq TeX-master nil)
-
-;; citar
-(after! citar
-  (setq! citar-bibliography '("~/bib/references.bib"))
-  (setq! citar-library-paths '("~/bib/library/files"))
-  (setq! citar-notes-paths '("~/bib/notes")))
-
-(setq reftex-default-bibliography "~/bib/references.bib")
-
-;;biblio
-(setq biblio-download-directory "~/bib/library/files")
-
-;;performance hacks
-(setq max-lisp-eval-depth 13000)
-
-;;start full-screened
-(add-to-list 'initial-frame-alist '(fullscreen . maximized))
-
 
 ;; get org to shut up
 (after! org
@@ -144,10 +129,75 @@
                 (when (derived-mode-p 'org-mode)
                   (apply orig args)))))
 
-;; godot
-(setq treesit-extra-load-path '("~/repos/tree-sitter-gdscript/src/"))
-(setq gdscript-godot-executable "/home/pixie/.bin/Godot_v4.5-stable_mono_linux_x86_64/Godot_v4.5-stable_mono_linux.x86_64")
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                        ;                 Org                  ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(with-eval-after-load 'eglot
-  (add-to-list 'eglot-server-programs
-               '((gdscript-mode gdscript-ts-mode) . ("localhost" 6008))))
+org-agenda-files
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                        ;                Python               ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; IPython repl
+(after! python
+  (setq python-shell-interpreter "ipython"
+        python-shell-interpreter-args "-i --simple-prompt --InteractiveShell.display_page=True"))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                        ;                LaTeX                ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;; LaTeX stuff
+(map! :map cdlatex-mode-map :i "TAB" #'cdlatex-tab)
+(after! tex
+  (setq-default TeX-master nil))
+
+;; citar
+(after! citar
+  (setq citar-bibliography "~/bib/references.bib"
+        citar-library-paths "~/bib/library/files"
+        citar-notes-paths "~/bib/notes"))
+
+(after! reftex
+  (setq reftex-default-bibliography "~/bib/references.bib"))
+
+;;biblio
+(use-package! biblio
+  :custom
+  (biblio-download-directory "~/bib/library/files"))
+
+;; hack for which-key
+(after! which-key :ensure t :config (setq which-key-use-C-h-commands t) )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                        ;                 Misc                ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;performance hacks
+(setq max-lisp-eval-depth 13000)
+
+;;start full-screened
+(add-to-list 'initial-frame-alist '(fullscreen . maximized))
+
+
+;; TODO strip Documents/Research or something...
+(defun my-buffer-file-name ()
+  "Give the directory of (buffer-file-name), and replace the home path by '~'"
+  (interactive)
+  (concat "~/" (file-name-directory (file-relative-name (buffer-file-name) (expand-file-name "~"))))
+)
+
+(setq org-agenda-prefix-format
+  '((agenda  . " [%(my-buffer-file-name)]%i %-12:c%?-12t% s ")
+    (timeline  . "  [%(my-buffer-file-name)]% s ")
+    (todo  . " [%(my-buffer-file-name)]%i %-12:c ")
+    (tags  . " [%(my-buffer-file-name)]%i %-12:c ")
+    (search . " [%(my-buffer-file-name)]%i %-12:c ")))
+(setq org-refile-use-outline-path 'full-file-path)
+
+(map! :map cdlatex-mode-map
+        :i "TAB" #'cdlatex-tab)
+
+(setq! org-highlight-latex-and-related '(native))
