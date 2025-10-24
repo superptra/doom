@@ -201,3 +201,15 @@ org-agenda-files
         :i "TAB" #'cdlatex-tab)
 
 (setq! org-highlight-latex-and-related '(native))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                        ;                Godot                ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; godot
+(setq treesit-extra-load-path '("~/repos/tree-sitter-gdscript/src/"))
+(setq gdscript-godot-executable "/home/pixie/.bin/Godot_v4.5-stable_mono_linux_x86_64/Godot_v4.5-stable_mono_linux.x86_64")
+
+(with-eval-after-load 'eglot
+  (add-to-list 'eglot-server-programs
+               '((gdscript-mode gdscript-ts-mode) . ("localhost" 6008))))
