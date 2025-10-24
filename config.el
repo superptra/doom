@@ -133,9 +133,10 @@
                                         ;                 Org                  ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-org-agenda-files
-
-(setq! org-highlight-latex-and-related '(native))
+(after! org
+  (setq! org-highlight-latex-and-related '(native)))
+(after! org
+  (setq! org-agenda-todo-list-sublevels 'nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                                         ;                Python               ;
