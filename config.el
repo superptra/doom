@@ -135,6 +135,8 @@
 
 org-agenda-files
 
+(setq! org-highlight-latex-and-related '(native))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                                         ;                Python               ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -168,8 +170,9 @@ org-agenda-files
   :custom
   (biblio-download-directory "~/bib/library/files"))
 
-;; hack for which-key
-(after! which-key :ensure t :config (setq which-key-use-C-h-commands t) )
+
+(map! :map cdlatex-mode-map
+        :i "TAB" #'cdlatex-tab)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                                         ;                 Misc                ;
@@ -181,26 +184,9 @@ org-agenda-files
 ;;start full-screened
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 
+;; hack for which-key
+(after! which-key :ensure t :config (setq which-key-use-C-h-commands t) )
 
-;; TODO strip Documents/Research or something...
-(defun my-buffer-file-name ()
-  "Give the directory of (buffer-file-name), and replace the home path by '~'"
-  (interactive)
-  (concat "~/" (file-name-directory (file-relative-name (buffer-file-name) (expand-file-name "~"))))
-)
-
-(setq org-agenda-prefix-format
-  '((agenda  . " [%(my-buffer-file-name)]%i %-12:c%?-12t% s ")
-    (timeline  . "  [%(my-buffer-file-name)]% s ")
-    (todo  . " [%(my-buffer-file-name)]%i %-12:c ")
-    (tags  . " [%(my-buffer-file-name)]%i %-12:c ")
-    (search . " [%(my-buffer-file-name)]%i %-12:c ")))
-(setq org-refile-use-outline-path 'full-file-path)
-
-(map! :map cdlatex-mode-map
-        :i "TAB" #'cdlatex-tab)
-
-(setq! org-highlight-latex-and-related '(native))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                                         ;                Godot                ;
