@@ -58,3 +58,4 @@
 (package! biblio)
 (package! nyan-mode)
 (package! djvu)
+(package! nov)
