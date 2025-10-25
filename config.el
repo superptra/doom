@@ -136,7 +136,7 @@
 (after! org
   (setq! org-highlight-latex-and-related '(native)))
 (after! org
-  (setq! org-agenda-todo-list-sublevels 'nil)
+  (setq! org-agenda-todo-list-sublevels 'nil))
 
 (after! org
   (setq org-todo-keywords '((sequence "TODO(t)" "NEXT(n)" "PROJ(p)" "LOOP(r)" "STRT(s)" "WAIT(w)" "HOLD(h)" "IDEA(i)"
