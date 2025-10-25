@@ -57,3 +57,4 @@
   :recipe (:host github :repo "jkitchin/ox-ipynb"))
 (package! biblio)
 (package! nyan-mode)
+(package! djvu)
