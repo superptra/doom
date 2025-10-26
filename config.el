@@ -149,7 +149,7 @@
   (add-to-list 'org-todo-keyword-faces '("NEXT" . +org-todo-active)))
 
 (after! org
-  (setq org-md-headline-style 'mixed))
+  (setq org-md-headline-style 'setext))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
