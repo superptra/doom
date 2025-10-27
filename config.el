@@ -140,11 +140,17 @@
 (after! org
   (setq! org-agenda-todo-list-sublevels 'nil)) ; not sure about this
 
+;; (after! org
+;;   (setq org-todo-keywords '((sequence "TODO(t)" "NEXT(N)" "PROJ(p)" "LOOP(r)" "STRT(s)" "WAIT(w)" "HOLD(h)" "IDEA(i)"
+;;            "|" "DONE(d)" "KILL(k)")
+;;        (sequence "[ ](T)" "[-](S)" "[?](W)" "|" "[X](D)")
+;;               (sequence "|" "OKAY(o)" "YES(y)" "NO(n)"))))
 (after! org
-  (setq org-todo-keywords '((sequence "TODO(t)" "NEXT(N)" "PROJ(p)" "LOOP(r)" "STRT(s)" "WAIT(w)" "HOLD(h)" "IDEA(i)"
-           "|" "DONE(d)" "KILL(k)")
-       (sequence "[ ](T)" "[-](S)" "[?](W)" "|" "[X](D)")
-              (sequence "|" "OKAY(o)" "YES(y)" "NO(n)"))))
+  (setq org-todo-keywords '((sequence "TODO(t)" "NEXT(n)" "STRT(s)"
+           "|" "DONE(d)")
+       (sequence "[ ](T)" "[-](S)" "|" "[X](D)")
+              (sequence "WAIT(w)" "HOLD(h)" "MAYBE(m)" "|" "KILL(k)")
+              (sequence "PROJ(p)" "LOOP(r)" "|"))))
 (after! org
   (add-to-list 'org-todo-keyword-faces '("NEXT" . +org-todo-active)))
 
