@@ -32,7 +32,7 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-dracula)
+(setq doom-theme 'doom-one) ;; earl grey for day theme
 (if (featurep :system 'macos)
     (setq doom-font "Menlo-22")
     (setq doom-font "Hack-18"))
@@ -221,11 +221,3 @@
   (add-to-list 'eglot-server-programs
                '((gdscript-mode gdscript-ts-mode) . ("localhost" 6008))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-                                        ;      Making themes look better      ;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-;; Fix dracula in jupyter blocks
-(custom-set-faces!
-  '(org-block :inherit fixed-pitch :foreground unspecified))
