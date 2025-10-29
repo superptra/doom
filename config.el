@@ -221,3 +221,10 @@
   (add-to-list 'eglot-server-programs
                '((gdscript-mode gdscript-ts-mode) . ("localhost" 6008))))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                        ;      Making themes look better      ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Fix dracula in jupyter blocks
+(custom-set-faces!
+  '(org-block :inherit fixed-pitch :foreground unspecified))
