@@ -32,7 +32,7 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-one) ;; earl grey for day theme
+(setq doom-theme 'doom-dracula) ;; earl grey for day theme
 (if (featurep :system 'macos)
     (setq doom-font "Menlo-22")
     (setq doom-font "Hack-18"))
