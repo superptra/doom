@@ -59,3 +59,5 @@
 (package! nyan-mode)
 (package! djvu)
 (package! nov)
+(package! org-ql)
+(package! orgtbl-aggregate)
